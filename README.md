@@ -43,3 +43,38 @@ mysql> SELECT getamount('2');//
 +----------------+
 1 row in set (0.007 sec)
 Query OK, 0 rows affected (0.105 sec)
+
+function with conditional logic
+
+ DELIMITER //
+mysql> CREATE FUNCTION getstatus1(o_id int)
+    ->    RETURNS int
+    ->    DETERMINISTIC
+    ->    BEGIN
+    ->       declare stats varchar(20);
+    ->       select status into stats from orders where
+    ->    order_id = o_id;
+    ->  IF stats='paid' then
+    ->         RETURN 1;
+    ->     ELSE
+    ->         RETURN 0;
+    ->     END IF;
+    ->    END//
+Query OK, 0 rows affected (0.087 sec)
+
+mysql> select getstatus1(1);//
++---------------+
+| getstatus1(1) |
++---------------+
+|             0 |
++---------------+
+1 row in set (0.023 sec)
+
+mysql> select getstatus1(2);//
++---------------+
+| getstatus1(2) |
++---------------+
+|             1 |
++---------------+
+1 row in set (0.007 sec)
+
